@@ -1,0 +1,251 @@
+/* Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background-color: #ffffff;
+  color: #003333;
+  overflow-x: hidden;
+}
+
+/* Splash Screen */
+#splash {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  animation: fadeOut 1s ease 3s forwards;
+}
+
+#splash h1 {
+  font-size: 48px;
+  color: #003333;
+  animation: growLogo 2s ease forwards;
+}
+
+#logo-nv {
+  display: none;
+  font-size: 64px;
+  font-weight: bold;
+  color: #003333;
+  position: relative;
+  animation: fadeIn 1s ease 2.5s forwards;
+}
+
+#logo-nv::after {
+  content: '🌿';
+  position: absolute;
+  top: -20px;
+  right: -10px;
+  font-size: 24px;
+}
+
+#logo-text {
+  display: none;
+  font-size: 20px;
+  color: #003333;
+  animation: fadeIn 1s ease 3s forwards;
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes growLogo {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.2); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; display: block; }
+}
+
+/* Header/Navbar */
+header {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 10;
+  padding: 10px 40px;
+  background: transparent;
+  transition: background 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header.scrolled {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #003333;
+}
+
+nav a {
+  margin-left: 20px;
+  text-decoration: none;
+  color: #003333;
+  font-weight: 500;
+}
+
+/* Hero / BMI Explanation */
+.hero {
+  min-height: 100vh;
+  background-image: url('../static/images/hero-bg.png'); /* Pastikan gambarnya tersedia */
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 60px 40px 120px;
+}
+
+.hero h1 {
+  font-size: 40px;
+  color: #003333;
+}
+
+.hero p {
+  font-size: 18px;
+  max-width: 600px;
+  color: #004444;
+  margin-top: 10px;
+}
+
+/* Calculator Section */
+.calculator {
+  background-color: #f5fdfc;
+  padding: 60px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.calculator h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #003333;
+}
+
+.calculator input {
+  padding: 10px;
+  width: 250px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.calculator button {
+  background-color: #003333;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+.calculator button:hover {
+  background-color: #005555;
+}
+
+/* Result Boxes */
+.results {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  padding: 60px 40px;
+  background-color: #f5fdfc;
+}
+
+.result-box {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.result-box h3 {
+  font-size: 20px;
+  color: #003333;
+  margin-bottom: 10px;
+}
+
+/* YouTube & Diagram */
+.embed-video {
+  width: 100%;
+  height: 300px;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-top: 15px;
+}
+
+.chart {
+  max-width: 100%;
+  margin: auto;
+  margin-top: 20px;
+}
+
+/* WhatsApp Floating Button */
+.whatsapp-float {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 99;
+  background-color: #25D366;
+  padding: 14px;
+  border-radius: 50%;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.whatsapp-float img {
+  width: 32px;
+  height: 32px;
+}
+
+/* Footer */
+footer {
+  background-color: #003333;
+  color: #ffffff;
+  padding: 40px;
+  text-align: center;
+}
+
+footer a {
+  color: #00ffee;
+  text-decoration: none;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  header {
+    padding: 10px 20px;
+  }
+  .hero {
+    padding: 40px 20px 100px;
+  }
+  .calculator input {
+    width: 100%;
+  }
+  .results {
+    padding: 40px 20px;
+  }
+}

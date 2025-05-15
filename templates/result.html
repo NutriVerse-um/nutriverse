@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hasil NutriVerse</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<header class="scrolled">
+  <div class="logo">NutriVerse</div>
+  <nav>
+    <a href="/">Kembali</a>
+  </nav>
+</header>
+
+<section class="calculator" style="margin-top: 80px;">
+  <h2>Hasil Analisis Gizi Kamu</h2>
+  <p><strong>BMI:</strong> {{ bmi }} | <strong>Status:</strong> {{ status }}</p>
+</section>
+
+<section class="results">
+  <!-- Box 1: Status Gizi -->
+  <div class="result-box">
+    <h3>Status Gizi</h3>
+    <p>Kamu berada dalam kategori: <strong>{{ status }}</strong></p>
+    <canvas id="nutritionChart"></canvas>
+  </div>
+
+  <!-- Box 2: Pola Makan & Tidur -->
+  <div class="result-box">
+    <h3>Pola Makan & Tidur</h3>
+    <p>Makan teratur 3x sehari + 2x camilan sehat. Tidur minimal 7 jam/malam.</p>
+  </div>
+
+  <!-- Box 3: Video Edukasi -->
+  <div class="result-box">
+    <h3>Video Edukasi Gizi</h3>
+    <div class="embed-video">
+      <iframe width="100%" height="100%" src="{{ video_url }}" frameborder="0" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <!-- Box 4: Rekomendasi Gizi -->
+  <div class="result-box">
+    <h3>Menu & Saran Gizi</h3>
+    <ul>
+      {% for item in saran %}
+        <li>{{ item }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+<div style="text-align:center; padding:20px;">
+  <a href="/" class="calculator button">Hitung Kembali</a>
+</div>
+
+<!-- WA Float -->
+<a href="https://wa.me/6281295738629" class="whatsapp-float" target="_blank">
+  <img src="{{ url_for('static', filename='images/whatsapp.png') }}" alt="WhatsApp">
+</a>
+
+<!-- Footer -->
+<footer>
+  <p>© 2025 NutriVerse. All rights reserved. | Instagram: @nutriverse | Email: nutriverse@gmail.com</p>
+</footer>
+
+<script>
+  const ctx = document.getElementById('nutritionChart');
+  if (ctx) {
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: ['Karbohidrat', 'Protein', 'Lemak'],
+        datasets: [{
+          label: 'Distribusi Nutrisi',
+          data: {{ chart_data }},
+          backgroundColor: ['#FFD700', '#4CAF50', '#FF6347'],
+          borderWidth: 1
+        }]
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
