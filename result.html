@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Hasil Gizi</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="{{ bg_class }}">
+    <div class="navbar">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#contact">Contact Us</a></li>
+        </ul>
+    </div>
+
+    <div class="result-container">
+        <h1>Status Gizi Anda: <span class="highlight">{{ status }}</span></h1>
+        <p class="saran">{{ saran }}</p>
+
+        <div class="result-boxes">
+            <div class="box">BMI: {{ bmi }}</div>
+            <div class="box">Berat: {{ berat }} kg</div>
+            <div class="box">Tinggi: {{ tinggi }} cm</div>
+            <div class="box">Umur: {{ umur }} tahun</div>
+        </div>
+
+        <h3>Komposisi Nutrisi Harian:</h3>
+        <canvas id="kaloriChart" width="300" height="300"></canvas>
+
+        <div class="gizi-detail">
+            <p>Protein: {{ protein }} gram</p>
+            <p>Lemak: {{ fat }} gram</p>
+            <p>Karbohidrat: {{ carbs }} gram</p>
+        </div>
+
+        <h3>Saran Pola Makan dan Tidur</h3>
+        <p>Disarankan makan 3 kali sehari dengan 2 kali selingan sehat. Tidur cukup 7–9 jam per hari.</p>
+
+        <div class="youtube-video">
+            <iframe width="400" height="250" src="https://www.youtube.com/embed/1oMgG9naTwY" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <div class="footer-section" id="about">
+        <div>
+            <h2>About Us</h2>
+            <p>NutriVerse adalah aplikasi pintar yang membantu pengguna menjaga pola makan sehat berdasarkan perhitungan status gizi.</p>
+        </div>
+        <div id="contact">
+            <h2>Contact Us</h2>
+            <p>Email: info@nutriverse.com<br>WhatsApp: +62 812-9573-8629</p>
+        </div>
+    </div>
+
+    <a href="https://wa.me/6281295738629" class="wa-button">💬</a>
+
+    <script>
+        const ctx = document.getElementById('kaloriChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Protein', 'Lemak', 'Karbohidrat'],
+                datasets: [{
+                   data: {{ [protein, fat, carbs] | tojson }},
+                    backgroundColor: ['#FF6384', '#FFCE56', '#36A2EB'],
+                    borderWidth: 1
+                }]
+            }
+        });
+    </script>
+</body>
+</html>

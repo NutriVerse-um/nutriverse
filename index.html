@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>NutriVerse</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="{{ bg_class }}">
+    <div class="navbar">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#contact">Contact Us</a></li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h1>NutriVerse</h1>
+        <h2>Kalkulator Status Gizi</h2>
+        <form action="/result" method="POST">
+            <input type="number" name="berat" placeholder="Berat Badan (kg)" required><br>
+            <input type="number" name="tinggi" placeholder="Tinggi Badan (cm)" required><br>
+            <input type="number" name="umur" placeholder="Umur" required><br>
+            <button type="submit">Hitung</button>
+        </form>
+    </div>
+
+    <div class="footer-section" id="about">
+        <div>
+            <h2>About Us</h2>
+            <p>NutriVerse adalah aplikasi pintar yang membantu pengguna menjaga pola makan sehat berdasarkan perhitungan status gizi.</p>
+        </div>
+        <div id="contact">
+            <h2>Contact Us</h2>
+            <p>Email: info@nutriverse.com<br>WhatsApp: +62 812-9573-8629</p>
+        </div>
+    </div>
+
+    <a href="https://wa.me/6281295738629" class="wa-button">💬</a>
+</body>
+</html>
