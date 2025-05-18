@@ -1,74 +1,135 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <title>Hasil Gizi</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hasil NutriVerse</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="{{ bg_class }}">
-    <div class="navbar">
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="#about">About Us</a></li>
-            <li><a href="#contact">Contact Us</a></li>
-        </ul>
+<body>
+
+<header class="scrolled">
+  <div class="logo">NutriVerse</div>
+  <nav>
+    <a href="/">Kembali</a>
+  </nav>
+</header>
+
+<main class="result-container">
+  <div class="result-box">
+    <p><strong>Umur:</strong> {{ age }} tahun</p>
+    <p><strong>Berat Badan:</strong> {{ weight }} kg</p>
+    <p><strong>Tinggi Badan:</strong> {{ height }} m</p>
+    <p><strong>BMI:</strong> {{ bmi }}</p>
+    <p><strong>Status Gizi:</strong> {{ status }}</p>
+  </div>
+  <a href="/" class="button">Hitung Kembali</a>
+</main>
+
+<section class="calculator" style="margin-top: 80px;">
+  <h2>Hasil Analisis Gizi Kamu</h2>
+  <p><strong>BMI:</strong> {{ bmi }} | <strong>Status:</strong> {{ status }}</p>
+</section>
+
+<section class="results">
+  <!-- Box 1: Status Gizi -->
+  <div class="result-box">
+    <h3>Status Gizi</h3>
+    <p>Kamu berada dalam kategori: <strong>{{ status }}</strong></p>
+    <p><strong>BMI:</strong> {{ bmi }}</p>
+    <canvas id="nutritionChart"></canvas>
+  </div>
+
+  <!-- Box 2: Pola Makan -->
+  <div class="result-box">
+    <h3>Pola Makan & Tidur</h3>
+    <p><strong>Rekomendasi Pola:</strong> {{ pattern }}</p>
+    <p><strong>Saran:</strong> {{ advice }}</p>
+  </div>
+
+  <!-- Box 3: Video Edukasi -->
+  <div class="result-box">
+    <h3>Video Edukasi Gizi</h3>
+    <div class="embed-video">
+      <iframe width="100%" height="100%" src="{{ youtube }}" frameborder="0" allowfullscreen></iframe>
     </div>
+  </div>
 
-    <div class="result-container">
-        <h1>Status Gizi Anda: <span class="highlight">{{ status }}</span></h1>
-        <p class="saran">{{ saran }}</p>
+  <!-- Box 4: Menu Rekomendasi -->
+  <div class="result-box">
+    <h3>Menu Rekomendasi</h3>
+    <ul>
+      {% for item in menu %}
+        <li>{{ item }}</li>
+      {% endfor %}
+    </ul>
+  </div>
 
-        <div class="result-boxes">
-            <div class="box">BMI: {{ bmi }}</div>
-            <div class="box">Berat: {{ berat }} kg</div>
-            <div class="box">Tinggi: {{ tinggi }} cm</div>
-            <div class="box">Umur: {{ umur }} tahun</div>
-        </div>
+  <!-- Box 5: Total Kalori -->
+  <div class="result-box">
+    <h3>Total Kalori Harian Ideal</h3>
+    <p>Perkiraan kebutuhan kalori harianmu adalah: <strong>{{ kalori }}</strong> kkal</p>
+    <p>Ini bisa bervariasi tergantung aktivitas dan metabolisme tubuh.</p>
+  </div>
 
-        <h3>Komposisi Nutrisi Harian:</h3>
-        <canvas id="kaloriChart" width="300" height="300"></canvas>
+  <!-- Box 6: Tips Gaya Hidup -->
+  <div class="result-box">
+    <h3>Tips Gaya Hidup Sehat</h3>
+    <ul>
+      <li>Minum air putih minimal 8 gelas per hari</li>
+      <li>Berolahraga 3–5 kali seminggu</li>
+      <li>Tidur cukup (7–9 jam)</li>
+      <li>Kurangi makanan olahan & tinggi gula</li>
+    </ul>
+  </div>
 
-        <div class="gizi-detail">
-            <p>Protein: {{ protein }} gram</p>
-            <p>Lemak: {{ fat }} gram</p>
-            <p>Karbohidrat: {{ carbs }} gram</p>
-        </div>
+  <!-- Box 7: Info BMI Global -->
+  <div class="result-box">
+    <h3>Info Menarik Tentang BMI</h3>
+    <p>BMI dikembangkan oleh Adolphe Quetelet pada abad ke-19 dan masih digunakan hingga sekarang.</p>
+    <p>Meskipun bermanfaat, BMI tidak memperhitungkan massa otot atau distribusi lemak.</p>
+  </div>
+</section>
 
-        <h3>Saran Pola Makan dan Tidur</h3>
-        <p>Disarankan makan 3 kali sehari dengan 2 kali selingan sehat. Tidur cukup 7–9 jam per hari.</p>
+<div class="result-buttons">
+  <a href="/" class="button">Hitung Kembali</a>
+</div>
 
-        <div class="youtube-video">
-            <iframe width="400" height="250" src="https://www.youtube.com/embed/1oMgG9naTwY" frameborder="0" allowfullscreen></iframe>
-        </div>
-    </div>
+<!-- WA Float -->
+<a href="https://wa.me/6281295738629" class="whatsapp-float" target="_blank">
+  <img src="{{ url_for('static', filename='images/whatsapp.png') }}" alt="WhatsApp">
+</a>
 
-    <div class="footer-section" id="about">
-        <div>
-            <h2>About Us</h2>
-            <p>NutriVerse adalah aplikasi pintar yang membantu pengguna menjaga pola makan sehat berdasarkan perhitungan status gizi.</p>
-        </div>
-        <div id="contact">
-            <h2>Contact Us</h2>
-            <p>Email: info@nutriverse.com<br>WhatsApp: +62 812-9573-8629</p>
-        </div>
-    </div>
+<!-- Footer -->
+<footer>
+  <p>© 2025 NutriVerse. All rights reserved. | Instagram: @nutriverse | Email: nutriverse@gmail.com</p>
+</footer>
 
-    <a href="https://wa.me/6281295738629" class="wa-button">💬</a>
+<script>
+  const ctx = document.getElementById('nutritionChart');
+  if (ctx) {
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: ['Karbohidrat', 'Protein', 'Lemak'],
+        datasets: [{
+          data: {{ chart_data }},
+          backgroundColor: ['#FFD700', '#4CAF50', '#FF6347'],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    });
+  }
+</script>
 
-    <script>
-        const ctx = document.getElementById('kaloriChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: ['Protein', 'Lemak', 'Karbohidrat'],
-                datasets: [{
-                   data: {{ [protein, fat, carbs] | tojson }},
-                    backgroundColor: ['#FF6384', '#FFCE56', '#36A2EB'],
-                    borderWidth: 1
-                }]
-            }
-        });
-    </script>
 </body>
 </html>
