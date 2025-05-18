@@ -1,41 +1,166 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <title>NutriVerse</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NutriVerse</title>
+  <meta name="description" content="Aplikasi NutriVerse: Kalkulator Gizi BMI dan saran pola hidup sehat." />
+  <meta name="keywords" content="BMI, gizi, kalkulator BMI, NutriVerse, status gizi" />
+  <meta name="author" content="NutriVerse Team" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <script defer src="{{ url_for('static', filename='script.js') }}"></script>
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
 </head>
-<body class="{{ bg_class }}">
-    <div class="navbar">
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="#about">About Us</a></li>
-            <li><a href="#contact">Contact Us</a></li>
-        </ul>
-    </div>
+<body>
 
-    <div class="container">
-        <h1>NutriVerse</h1>
-        <h2>Kalkulator Status Gizi</h2>
-        <form action="/result" method="POST">
-            <input type="number" name="berat" placeholder="Berat Badan (kg)" required><br>
-            <input type="number" name="tinggi" placeholder="Tinggi Badan (cm)" required><br>
-            <input type="number" name="umur" placeholder="Umur" required><br>
-            <button type="submit">Hitung</button>
-        </form>
-    </div>
+  <!-- Splash screen -->
+<div id="splash">
+  <div class="splash-content">
+    <img src="{{ url_for('static', filename='img/logo-nv.png') }}" class="logo" alt="Logo NutriVerse" />
+    <h1 class="main-title">NutriVerse</h1>
+    <p class="subtitle">Solusi Gizi Masa Kini</p>
+  </div>
+</div>
 
-    <div class="footer-section" id="about">
-        <div>
-            <h2>About Us</h2>
-            <p>NutriVerse adalah aplikasi pintar yang membantu pengguna menjaga pola makan sehat berdasarkan perhitungan status gizi.</p>
+
+  <!-- Header -->
+  <header id="navbar">
+    <h1>NutriVerse</h1>
+    <nav>
+      <a href="#about">Tentang</a>
+      <a href="#calculator">Kalkulator</a>
+      <a href="#footer">Kontak</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="about" class="hero">
+    <h2>Apa itu BMI?</h2>
+    <p>BMI (Body Mass Index) adalah indeks massa tubuh untuk mengetahui status gizi berdasarkan berat dan tinggi.</p>
+
+    <h2>Apa itu NutriVerse?</h2>
+    <p>NutriVerse adalah aplikasi sederhana yang membantu Anda memahami status gizi dan memberikan saran pola makan & tidur.</p>
+  </section>
+
+  <!-- Calculator -->
+  <section id="calculator">
+    <div class="calculator" id="form-section">
+      <h2>Kalkulator Gizi</h2>
+      <form id="bmiForm">
+        <label for="umur">Umur (tahun):</label>
+        <input type="number" name="umur" id="umur" required />
+
+        <label for="berat">Berat Badan (kg):</label>
+        <input type="number" name="berat" id="berat" step="0.1" required />
+
+        <label for="tinggi">Tinggi Badan (cm):</label>
+        <input type="number" name="tinggi" id="tinggi" step="0.1" required />
+
+        <button type="submit">Hitung</button>
+      </form>
+
+      <div id="hasil-section" class="result" style="display: none;">
+        <h2>Hasil Perhitungan Gizi</h2>
+
+        <div class="box">
+          <span>Status Gizi: </span><span id="statusGizi"></span>
         </div>
-        <div id="contact">
-            <h2>Contact Us</h2>
-            <p>Email: info@nutriverse.com<br>WhatsApp: +62 812-9573-8629</p>
+        <div class="box">
+          <span>BMI Anda: </span><span id="bmiValue"></span>
         </div>
-    </div>
+        <div class="box">
+          <span>Kalori Harian Disarankan: </span><span id="kaloriHarian"></span>
+        </div>
+        <div class="box">
+          <span>Tips Gizi: </span><span id="tipsGizi"></span>
+        </div>
 
-    <a href="https://wa.me/6281295738629" class="wa-button">💬</a>
+        <!-- Diagram Kalori -->
+        <canvas id="pieChart" width="300" height="300" style="margin: 20px auto;"></canvas>
+
+        <!-- Tombol Hitung Kembali -->
+        <a href="#form-section" class="back-btn">Hitung Kembali</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- WhatsApp Button -->
+  <div class="whatsapp-float">
+    <a href="https://wa.me/6281295738629" target="_blank">
+      <img src="{{ url_for('static', filename='wa.png') }}" alt="WhatsApp" />
+    </a>
+  </div>
+
+  <!-- Footer -->
+  <footer id="footer">
+    <p>Email: nutriverse@email.com</p>
+    <p>Instagram: @nutriverse.id</p>
+    <p>Tentang NutriVerse: Platform digital sederhana untuk membantu Anda menjaga gizi dengan pola makan, tidur, dan edukasi gizi interaktif.</p>
+  </footer>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Kalkulasi & Chart Logic -->
+  <script>
+    document.getElementById("bmiForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const umur = parseInt(document.getElementById("umur").value);
+      const berat = parseFloat(document.getElementById("berat").value);
+      const tinggi = parseFloat(document.getElementById("tinggi").value) / 100;
+
+      if (!umur || !berat || !tinggi || tinggi === 0) return;
+
+      const bmi = berat / (tinggi * tinggi);
+      let status = "";
+      let tips = [];
+      let kalori = 0;
+
+      if (bmi < 18.5) {
+        status = "Underweight";
+        tips = ["Makan lebih sering", "Perbanyak asupan kalori", "Konsultasi gizi"];
+        kalori = 35 * berat;
+      } else if (bmi < 24.9) {
+        status = "Ideal";
+        tips = ["Pertahankan pola hidup sehat", "Lanjutkan olahraga rutin", "Perhatikan asupan gizi"];
+        kalori = 30 * berat;
+      } else {
+        status = "Obesitas";
+        tips = ["Kurangi konsumsi gula & lemak", "Tingkatkan aktivitas fisik", "Konsultasi dengan ahli gizi"];
+        kalori = 25 * berat;
+      }
+
+      document.getElementById("statusGizi").innerText = status;
+      document.getElementById("bmiValue").innerText = bmi.toFixed(2);
+      document.getElementById("kaloriHarian").innerText = kalori + " kkal";
+      document.getElementById("tipsGizi").innerHTML = tips.map(t => "• " + t).join("<br>");
+
+      document.getElementById("hasil-section").style.display = "block";
+      document.getElementById("hasil-section").scrollIntoView({ behavior: "smooth" });
+
+      // Pie Chart
+      const ctx = document.getElementById("pieChart").getContext("2d");
+      const protein = Math.round(kalori * 0.15);
+      const lemak = Math.round(kalori * 0.25);
+      const karbo = kalori - protein - lemak;
+
+      if (window.myChart) window.myChart.destroy();
+      window.myChart = new Chart(ctx, {
+        type: "pie",
+        data: {
+          labels: ["Karbohidrat", "Protein", "Lemak"],
+          datasets: [{
+            data: [karbo, protein, lemak],
+            backgroundColor: ["#f4a261", "#2a9d8f", "#e76f51"],
+          }]
+        }
+      });
+    });
+  </script>
 </body>
 </html>
